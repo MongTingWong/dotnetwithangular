@@ -1,8 +1,11 @@
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
 using DatingApp.API.Dtos;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API.Controllers
 {
@@ -34,7 +37,19 @@ namespace DatingApp.API.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto){
-            
+            var userFromRepo = await _repo.Login(userForLoginDto.Username, userForLoginDto.Password);
+
+            if(userForLoginDto == null){
+                return Unauthorized();
+            }
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
+                new Claim(ClaimTypes.Name, userFromRepo.Username)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding)
         }
     }
 }
