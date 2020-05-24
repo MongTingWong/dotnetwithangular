@@ -8,7 +8,7 @@ import { AuthService } from '../_services/auth.service';
 })
 export class NavComponent implements OnInit {
 
-  model: any ={};
+  model: any = {};
 
   constructor(private authService: AuthService) { }
 
@@ -21,6 +21,15 @@ export class NavComponent implements OnInit {
     }, error => {
       console.log('Failed to login')
     });
+  }
+
+  loggedIn(){
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
+
+  logout(){
+    localStorage.removeItem('token');
   }
 
 }
